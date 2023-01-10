@@ -35,12 +35,32 @@ namespace AddressBook_1
                 add.CreateContact(FirstName, LastName, Address, City, State, Email, Zip, PhoneNum);
                 Contact--;
             }
-            Console.WriteLine("Do YOu Want To MOdify(Y/N)");
-            char ch = Convert.ToChar(Console.ReadLine());
-            if (ch == 'Y' || ch == 'y')
+            
+            while (true)
             {
-                add.EditContact();
+                Console.WriteLine("1.Edit contact\n2.Delete contact for AddressBook");
+
+                int op = Convert.ToInt32(Console.ReadLine());
+                switch (op)
+                {
+                    case 1:
+                        Console.WriteLine("Do YOu Want To MOdify(Y/N)");
+                        char ch = Convert.ToChar(Console.ReadLine());
+                        if (ch == 'Y' || ch == 'y')
+                        {
+                            add.EditContact();
+                        }
+
+                        break;
+                    case 2:
+                        add.Delete();
+                        break;
+                    default:
+                        Console.WriteLine("Enter Valid Option");
+                        break;
+                }
             }
+
         }
         public void DisplayContacts(AddressBook[] ContactArray, int n)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,6 +95,14 @@ namespace AddressBook_1
             }
             Program pr = new Program();
             pr.DisplayContacts(ContactArray, Contact);
+        }
+        public void Delete(string name)
+        {
+            if (FirstName == name || LastName == name)
+            {
+                Address.Remove(Contact);
+            }
+            Console.WriteLine("Contact Deleted Successfully");
         }
 
     }
