@@ -53,7 +53,7 @@ namespace AddressBook_1
 
                         break;
                     case 2:
-                        add.Delete();
+                        add.Delete("mahesh");
                         break;
                     default:
                         Console.WriteLine("Enter Valid Option");
