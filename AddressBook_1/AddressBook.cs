@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -7,103 +8,140 @@ using System.Threading.Tasks;
 
 namespace AddressBook_1
 {
-    public class AddressBook
+    public class Addressbook : Icontact
     {
-        public string FirstName, LastName, Address, City, State, Email;
-        public int Zip;
-        public long PhoneNum;
-        public AddressBook[] ContactArray;
-        public int Contact = 0;
-        public AddressBook()
-        {
-            this.ContactArray = new AddressBook[5];
-        }
-        public AddressBook(string firstName, string lastName, string address, string city, string state, string email, int zip, long phoneNum)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Address = address;
-            City = city;
-            State = state;
-            Email = email;
-            Zip = zip;
-            PhoneNum = phoneNum;
-        }
-        public void CreateContact(string firstName, string lastName, string address, string city, string state, string email, int zip, long phoneNum)
-        {
-            ContactArray[this.Contact] = new AddressBook(firstName, lastName, address, city, state, email, zip, phoneNum);
-            Contact++;
-            Program program = new Program();
-            program.DisplayContacts(ContactArray, Contact);
+        public Dictionary<string, Contacts> addressbook = new Dictionary<string, Contacts>();
+        public Dictionary<string, Addressbook> addressBookDic = new Dictionary<string, Addressbook>();
 
-        }
-        public void EditContact()
+
+
+        public void CreateContact(string firstName, string lastName, string address, string city, string state, string Email, int zip, long phoneNumber, string BookName)
         {
-            int i = 0;
-            Console.WriteLine("Enter First Name to Edit");
-            string FirstName = Console.ReadLine();
-            while (ContactArray[i].FirstName != FirstName)
+            Contacts co = new Contacts();
+            co.FirstName = firstName;
+            co.LastName = lastName;
+            co.Address = address;
+            co.City = city;
+            co.State = state;
+            co.Email = Email;
+            co.Zip = zip;
+            co.PhoneNumber = phoneNumber;
+            addressBookDic[BookName].addressbook.Add(co.FirstName, co);
+            Console.WriteLine("Added succsesfully");
+        }
+        public void ViewContact(string name, string BookName)
+        {
+            foreach (KeyValuePair<string, Contacts> item in addressBookDic[BookName].addressbook)
             {
-                i++;
+                if (item.Key.ToLower().Equals(name.ToLower()))
+                {
+                    Console.WriteLine("FirstName;" + item.Value.FirstName);
+                    Console.WriteLine("LastName;" + item.Value.LastName);
+                    Console.WriteLine("Address;" + item.Value.Address);
+                    Console.WriteLine("City;" + item.Value.City);
+                    Console.WriteLine("State;" + item.Value.State);
+                    Console.WriteLine("Zip;" + item.Value.Zip);
+                    Console.WriteLine("Email;" + item.Value.Email);
+                    Console.WriteLine("PhoneNumber;" + item.Value.PhoneNumber);
+                }
             }
-            Console.WriteLine("Enter Field ToBE Modify\n1.FirstNmae\n2.LastName\n3.Address\n4.City\n5.State\n6.Zip\n7.Email\n8.PhoneNUmber");
-            int option = Convert.ToInt32(Console.ReadLine());
-            switch (option)
+        }
+        public void ViewContact(string BookName)
+        {
+            foreach (KeyValuePair<string, Contacts> item in addressBookDic[BookName].addressbook)
             {
-                case 1:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string FName = Console.ReadLine();
-                    ContactArray[i].FirstName = FName;
-                    break;
-                case 2:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string LName = Console.ReadLine();
-                    ContactArray[i].LastName = LName;
-                    break;
-                case 3:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string Add = Console.ReadLine();
-                    ContactArray[i].Address = Add;
-                    break;
-                case 4:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string city = Console.ReadLine();
-                    ContactArray[i].City = city;
-                    break;
-                case 5:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string StateN = Console.ReadLine();
-                    ContactArray[i].State = StateN;
-                    break;
-                case 6:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    int ZipN = Convert.ToInt32(Console.ReadLine());
-                    ContactArray[i].Zip = ZipN;
-                    break;
-                case 7:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    string MailID = Console.ReadLine();
-                    ContactArray[i].Email = MailID;
-                    break;
-                case 8:
-                    Console.WriteLine("Enter the MOdifed Value");
-                    long PhnNum = Convert.ToInt64(Console.ReadLine());
-                    ContactArray[i].PhoneNum = PhnNum;
-                    break;
-
+                Console.WriteLine("FirstName;" + item.Value.FirstName);
+                Console.WriteLine("LastName;" + item.Value.LastName);
+                Console.WriteLine("Address;" + item.Value.Address);
+                Console.WriteLine("City;" + item.Value.City);
+                Console.WriteLine("State;" + item.Value.State);
+                Console.WriteLine("Zip;" + item.Value.Zip);
+                Console.WriteLine("Email;" + item.Value.Email);
+                Console.WriteLine("PhoneNumber;" + item.Value.PhoneNumber);
 
             }
-            Program pr = new Program();
-            pr.DisplayContacts(ContactArray, Contact);
-        }
-        public void Delete(string name)
-        {
-            if (FirstName == name || LastName == name)
-            {
-                Address.Remove(Contact);
-            }
-            Console.WriteLine("Contact Deleted Successfully");
+
         }
 
+
+        public void EditContact(string name, string BookName)
+        {
+            foreach (KeyValuePair<string, Contacts> item in addressBookDic[BookName].addressbook)
+            {
+                if (item.Key.Equals(name))
+                {
+                    Console.WriteLine("Enter Field ToBE Modify\n1.FirstNmae\n2.LastName\n3.Address\n4.City\n5.State\n6.Zip\n7.Email\n8.PhoneNUmber");
+                    int option = Convert.ToInt32(Console.ReadLine());
+                    switch (option)
+                    {
+                        case 1:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string FName = Console.ReadLine();
+                            item.Value.FirstName = FName;
+                            break;
+                        case 2:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string LName = Console.ReadLine();
+                            item.Value.LastName = LName;
+                            break;
+                        case 3:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string Add = Console.ReadLine();
+                            item.Value.Address = Add;
+                            break;
+                        case 4:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string city = Console.ReadLine();
+                            item.Value.City = city;
+                            break;
+                        case 5:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string StateN = Console.ReadLine();
+                            item.Value.State = StateN;
+                            break;
+                        case 6:
+                            Console.WriteLine("Enter the Modifed Value");
+                            int ZipN = Convert.ToInt32(Console.ReadLine());
+                            item.Value.Zip = ZipN;
+                            break;
+                        case 7:
+                            Console.WriteLine("Enter the Modifed Value");
+                            string MailID = Console.ReadLine();
+                            item.Value.Email = MailID;
+                            break;
+                        case 8:
+                            Console.WriteLine("Enter the Modifed Value");
+                            long PhnNum = Convert.ToInt64(Console.ReadLine());
+                            item.Value.PhoneNumber = PhnNum;
+                            break;
+                    }
+                    Console.WriteLine("Edited Successfully");
+                }
+
+            }
+
+        }
+        public void DeleteContact(string name, string BookName)
+        {
+            if (addressBookDic[BookName].addressbook.ContainsKey(name))
+            {
+                addressBookDic[BookName].addressbook.Remove(name);
+                Console.WriteLine("Deleted Successfully");
+            }
+            else
+            {
+                Console.WriteLine("Not found Try Again");
+            }
+        }
+        public void AddAddressBook(string BookName)
+        {
+            Addressbook book = new Addressbook();
+            addressBookDic.Add(BookName, book);
+            Console.WriteLine("AddressBook Created");
+        }
+        public Dictionary<string, Addressbook> GetaddressBook()
+        {
+            return addressBookDic;
+        }
     }
 }
